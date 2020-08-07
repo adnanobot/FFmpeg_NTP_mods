@@ -1576,12 +1576,17 @@ static int read_frame_internal(AVFormatContext *s, AVPacket *pkt)
 {
     int ret = 0, i, got_packet = 0;
     AVDictionary *metadata = NULL;
+    /* [WB: 08/07/2020] local store RTP time stamp */
+    uint64_t rtp_ntp_time_stamp = 0;
 
     av_init_packet(pkt);
 
     while (!got_packet && !s->internal->parse_queue) {
         AVStream *st;
         AVPacket cur_pkt;
+
+        /* [WB: 08/07/2020] Copy over the RTP time stamp */
+        rtp_ntp_time_stamp = cur_pkt.rtp_ntp_time_stamp;
 
         /* read next packet */
         ret = ff_read_packet(s, &cur_pkt);
@@ -1766,7 +1771,8 @@ FF_ENABLE_DEPRECATION_WARNINGS
                av_ts2str(pkt->pts),
                av_ts2str(pkt->dts),
                pkt->size, pkt->duration, pkt->flags);
-
+    /* [WB: 08/07/2020] Update packet RTP time stamp */
+    pkt->rtp_ntp_time_stamp = rtp_ntp_time_stamp;
     return ret;
 }
 

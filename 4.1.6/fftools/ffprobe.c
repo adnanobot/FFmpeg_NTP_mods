@@ -2046,6 +2046,12 @@ static void show_packet(WriterContext *w, InputFile *ifile, AVPacket *pkt, int p
     print_time("pts_time",        pkt->pts, &st->time_base);
     print_ts  ("dts",             pkt->dts);
     print_time("dts_time",        pkt->dts, &st->time_base);
+    /**
+     * [WB: 08/07/2020]
+     * Output RTP NTP time stamp data for packet dump in ffprobe
+     */
+    print_ts  ("rtp_ntp",         pkt->rtp_ntp_time_stamp);
+    print_time("rtp_ntp_time",    pkt->rtp_ntp_time_stamp, &st->time_base);
     print_duration_ts("duration",        pkt->duration);
     print_duration_time("duration_time", pkt->duration, &st->time_base);
     print_duration_ts("convergence_duration", pkt->convergence_duration);

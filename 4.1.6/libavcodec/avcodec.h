@@ -1464,6 +1464,12 @@ typedef struct AVPacket {
 
     int64_t pos;                            ///< byte position in stream, -1 if unknown
 
+    /**
+     * [WB: 08/07/2020]
+     * RTP NTP timestamp definition
+     */
+    uint64_t rtp_ntp_time_stamp;
+
 #if FF_API_CONVERGENCE_DURATION
     /**
      * @deprecated Same as the duration field, but as int64_t. This was required
